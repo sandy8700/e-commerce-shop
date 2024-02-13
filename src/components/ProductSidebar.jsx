@@ -1,8 +1,9 @@
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, FormControl, Navbar } from "react-bootstrap";
 import { CartState } from "../context/Context";
 import Rating from "./Rating";
+import { useLocation } from "react-router-dom";
 
-const Filters = () => {
+const ProductSidebar = () => {
   // const {
   //   productDispatch,
   //   productState: { byStock, byFastDelivery, sort, byRating },
@@ -24,6 +25,24 @@ const {
 
   return (
     <div className="filters">
+      {useLocation().pathname.split("/")[1] !== "cart" && (
+        <Navbar.Text className="search">
+           <span className="title">Search for products</span>
+              <FormControl
+                style={{ width: "100%" }}
+                type="search"
+                placeholder="Search a product..."
+                className="m-auto"
+                aria-label="Search"
+                onChange={(e) => {
+                  productDispatch({
+                    type: "FILTER_BY_SEARCH",
+                    payload: e.target.value,
+                  });
+                }}
+              />
+            </Navbar.Text>
+          )}
       <span className="title">Filter Products</span>
       <span>
         <Form.Check
@@ -114,4 +133,4 @@ const {
   );
 };
 
-export default Filters;
+export default ProductSidebar;

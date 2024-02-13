@@ -8,6 +8,7 @@ import AdminDashboard from "../admin/AdminDashboard";
 import PrivateRoute from './PrivateRoute';
 import ForgotPassword from "../pages/ForgotPassword";
 import Cart from "../pages/Cart";
+import Contacts from "../pages/Contacts";
 
 const RouterModule = () => {
   return (
@@ -16,6 +17,7 @@ const RouterModule = () => {
         <Routes>
           <Route path="/" element={<Home />} exact/>
           <Route path="/products" element={<Shop />} />
+          <Route path="/contact" element={<Contacts />} />
           <Route path="/login" element={<Login />} />
           <Route
           path="/admin/*"

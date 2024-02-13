@@ -2,7 +2,7 @@ import { firebaseApp } from "../firebase";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import logo from "../assets/react.svg";
+import logo from "../assets/logo.png";
 import { CartState } from "../context/Context";
 import { FaShoppingCart } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
@@ -42,44 +42,45 @@ const Navigation = () => {
     });
   }, []);
 
-const cartState = CartState(); 
-const { state, dispatch, productDispatch } = cartState || { state: {}, dispatch: () => {}, productDispatch: () => {} };
+  const cartState = CartState();
+  const { state, dispatch, productDispatch } = cartState || {
+    state: {},
+    dispatch: () => {},
+    productDispatch: () => {},
+  };
 
-const { cart } = state;
+  const { cart } = state;
   // const { state: { cart }, dispatch, productDispatch } = CartState();
   return (
     <>
-      <Navbar bg="dark" variant="dark" style={{ height: 80 }}>
+      <Navbar
+        bg="light"
+        variant="light"
+        style={{
+          height: "100px",
+          borderTop: "4px solid #007cc2",
+        }}>
         <Container>
           <Navbar.Brand>
             <Link to="/">
-              <img src={logo} alt="logo" />
+              <img
+                src={logo}
+                alt="logo"
+                className="img-fluid"
+                style={{ width: "100px" }}
+              />
             </Link>
           </Navbar.Brand>
-          {useLocation().pathname.split("/")[1] !== "cart" && (
-            <Navbar.Text className="search">
-              <FormControl
-                style={{ width: 500 }}
-                type="search"
-                placeholder="Search a product..."
-                className="m-auto"
-                aria-label="Search"
-                onChange={(e) => {
-                  productDispatch({
-                    type: "FILTER_BY_SEARCH",
-                    payload: e.target.value,
-                  });
-                }}
-              />
-            </Navbar.Text>
-          )}
+
           <Nav>
-            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/" px="2">Home</Nav.Link>
             <Nav.Link href="/products">Products</Nav.Link>
+            <Nav.Link href="/contact">Contact</Nav.Link>
+
             <Dropdown alignRight>
-              <Dropdown.Toggle variant="success">
-                <FaShoppingCart color="white" fontSize="25px" />
-                <Badge>{cart?.length}</Badge>
+              <Dropdown.Toggle variant="">
+                <FaShoppingCart color="black" fontSize="25px" />
+                <Badge className="bg-success">{cart?.length}</Badge>
               </Dropdown.Toggle>
 
               <Dropdown.Menu style={{ minWidth: 370 }}>
@@ -98,7 +99,7 @@ const { cart } = state;
                         </div>
                         <AiFillDelete
                           fontSize="20px"
-                          style={{ cursor: "pointer" }}
+                          style={{ cursor: "pointer", color: "red" }}
                           onClick={() =>
                             dispatch({
                               type: "REMOVE_FROM_CART",
@@ -119,8 +120,12 @@ const { cart } = state;
                 )}
               </Dropdown.Menu>
             </Dropdown>
+
             {user === null ? (
-              <Nav.Link href="/login">Login</Nav.Link>
+              <>
+                <Nav.Link href="/login" className="custom-primary mx-3">Login</Nav.Link>
+                <Nav.Link href="/register" className="custom-primary ">Register</Nav.Link>
+              </>
             ) : (
               <button
                 className="btn btn-danger mx-3"
@@ -128,11 +133,9 @@ const { cart } = state;
                 Logout
               </button>
             )}
-            <Nav.Link href="/register">Register</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
-      
     </>
   );
 };

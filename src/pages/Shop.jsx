@@ -1,75 +1,30 @@
-import { Container, Row, Col } from "react-bootstrap";
-import Filters from "../components/Filters";
-import SingleProduct from "../components/SingleProduct";
-import { CartState } from "../context/Context";
+import { Col, Container, Row } from "react-bootstrap";
 import MainLayout from "../layout/MainLayout";
+import ProductsItems from "../components/ProductsItems";
+import ProductSidebar from "../components/ProductSidebar";
+import Breadcrumbs from "../components/Breadcrumbs";
 
 const Shop = () => {
-  // const cartStateResult = CartState() || {};
-  // const {
-  //   state: { products },
-  //   productState: { sort, byStock, byFastDelivery, byRating, searchQuery },
-  // } = cartStateResult;
-  const cartStateResult = CartState() || {};
-  const {
-    state: { products } = { products: [] },
-    productState: {
-      sort = "default",
-      byStock = false,
-      byFastDelivery = false,
-      byRating = 0,
-      searchQuery = "",
-    } = {},
-  } = cartStateResult;
-
-  const transformProducts = () => {
-    let sortedProducts = products;
-
-    if (sort) {
-      sortedProducts = sortedProducts.sort((a, b) =>
-        sort === "lowToHigh" ? a.price - b.price : b.price - a.price
-      );
-    }
-
-    if (!byStock) {
-      sortedProducts = sortedProducts.filter((prod) => prod.inStock);
-    }
-
-    if (byFastDelivery) {
-      sortedProducts = sortedProducts.filter((prod) => prod.fastDelivery);
-    }
-
-    if (byRating) {
-      sortedProducts = sortedProducts.filter(
-        (prod) => prod.ratings >= byRating
-      );
-    }
-
-    if (searchQuery) {
-      sortedProducts = sortedProducts.filter((prod) =>
-        prod.name.toLowerCase().includes(searchQuery)
-      );
-    }
-
-    return sortedProducts;
-  };
+  const paths = [
+    { url: "/", label: "Home" },
+    { url: "/products", label: "Shop" },
+  ];
   return (
     <>
       <MainLayout>
-        <Container>
-          <Row>
-            <Col lg="4">
-              <Filters />
-            </Col>
-            <Col lg="8">
-              <div className="productContainer">
-                {transformProducts().map((prod) => (
-                  <SingleProduct prod={prod} key={prod.id} />
-                ))}
-              </div>
-            </Col>
-          </Row>
-        </Container>
+        <Breadcrumbs paths={paths} titles="Shop"></Breadcrumbs>
+        <div className="section">
+          <Container>
+            <Row>
+              <Col lg="3">
+                <ProductSidebar></ProductSidebar>
+              </Col>
+              <Col lg="9">
+                <ProductsItems></ProductsItems>
+              </Col>
+            </Row>
+          </Container>
+        </div>
       </MainLayout>
     </>
   );
